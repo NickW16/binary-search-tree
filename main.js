@@ -1,6 +1,7 @@
 // test array
 const testArray = [1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324];
-const uniqueSortedArray = [...new Set(testArray)].sort((a, b) => a - b);
+// this sorts the array
+const sortedArray = [...new Set(testArray)].sort((a, b) => a - b);
 
 // node factory with both right and left attributes
 function Node(data) {
@@ -28,7 +29,7 @@ function buildTree(array, start, end) { // for sorted arrays
     return root;
 }
 
-const myTree = new Tree(uniqueSortedArray);
+const myTree = new Tree(sortedArray);
 
 // pretty print function from theodinproject
 const prettyPrint = (node, prefix = '', isLeft = true) => {
