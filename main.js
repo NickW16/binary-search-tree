@@ -92,6 +92,25 @@ function deleteItem(root, value) {
     return root;
 }
 
+function find(root, value) {
+  // value is not found
+  if (root === null) {
+    console.log(`${value} was not found!`);
+    return null;
+  }
+  //value is found
+  if (root.data === value) {
+    console.log(`${value} was found! Node: `, root);
+    return root;
+  }
+
+  if (value < root.data) {
+    return find(root.left, value);
+  } else if (value > root.data) {
+    return find(root.right, value);
+  }
+}
+
 const myTree = new Tree(sortedArray);
 
 // test cases:
@@ -108,7 +127,12 @@ myTree.root = deleteItem(myTree.root, 200); // delete inexistent value
 myTree.root = deleteItem(myTree.root, 6345); // deleting high value
 myTree.root = deleteItem(myTree.root, 8); // deleting first node
 
-
+// testing find function
+// in this case we cannot assign 'find' to 'myTree' because
+// it erases the entire BST and only outputs the found node
+find(myTree.root, 1000); // existing node
+find(myTree.root, 4); // existing node
+find(myTree.root, 2); // non existent node
 
 // pretty print function from theodinproject
 const prettyPrint = (node, prefix = '', isLeft = true) => {
