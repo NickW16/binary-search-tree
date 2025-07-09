@@ -95,12 +95,10 @@ function deleteItem(root, value) {
 function find(root, value) {
   // value is not found
   if (root === null) {
-    console.log(`${value} was not found!`);
     return null;
   }
   //value is found
   if (root.data === value) {
-    console.log(`${value} was found! Node: `, root);
     return root;
   }
 
@@ -182,6 +180,23 @@ function postOrder(root, callback) {
   callback(root);
 }
 
+function height(root, value) {
+  const node = find(root, value);
+  if (!node) {
+    console.log(`${value} was not found!`);
+    return -1;
+  }
+
+  function getHeight(n) {
+    if (n === null) return -1;
+    return 1 + Math.max(getHeight(n.left), getHeight(n.right));
+  }
+
+  const h = getHeight(node);
+  console.log(`Height of node ${value}: ${h}`);
+  return h;
+}
+
 const myTree = new Tree(sortedArray);
 
 // test cases:
@@ -201,6 +216,8 @@ myTree.root = deleteItem(myTree.root, 8); // deleting first node
 // testing find function
 // in this case we cannot assign 'find' to 'myTree' because
 // it erases the entire BST and only outputs the found node
+// note:  removed prints from find function for better utility in
+// other functions
 find(myTree.root, 1000); // existing node
 find(myTree.root, 4); // existing node
 find(myTree.root, 2); // non existent node
@@ -221,6 +238,11 @@ inOrder(myTree.root, callback);
 //postOrder traversal function:
 console.log('postOrder traversal:')
 postOrder(myTree.root, callback);
+
+// height function:
+height(myTree.root, 1000); // high value
+height(myTree.root, 4); // low value
+height(myTree.root, 99); // non-existent value
 
 
 // pretty print function from theodinproject
