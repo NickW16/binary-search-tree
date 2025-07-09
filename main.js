@@ -122,11 +122,15 @@ function callback(node) {
 // it visits a node, does nothing with it and then adds its children
 // to the queue for later processing.
 // this is Breadth-Frist Search:
+// iterative version
 function levelOrder(root, callback) {
-  console.log('LevelOrder Traversing:');
+  if (typeof callback !== 'function') {
+    throw new Error('A callback function is required!');
+  }
   if (root === null) {
     return null;
   }
+  console.log('LevelOrder Traversing:');
   // this is an array that acts as a queue that is incremented
   // and decremented after each node visit
   let queue = [root];
@@ -137,6 +141,45 @@ function levelOrder(root, callback) {
     if (node.left != null) queue.push(node.left);
     if (node.right != null) queue.push(node.right);
   }
+}
+// recursive version of the above function
+function levelOrderRecursive(queue, callback) {
+  if (queue.length === 0) return;
+  let node = queue.shift();
+  callback(node);
+  if (node.left) queue.push(node.left);
+  if (node.right) queue.push(node.right);
+  levelOrderRecursive(queue, callback);
+}
+
+//preorder recursive function
+function preOrder(root, callback) {
+  if (root === null) {
+    return null;
+  }
+  callback(root); // call the callback function
+  preOrder(root.left, callback);
+  preOrder(root.right, callback);
+}
+
+// inorder recursive function
+function inOrder(root, callback) {
+  if (root === null) {
+    return null;
+  }
+  inOrder(root.left, callback);
+  callback(root);
+  inOrder(root.right, callback);
+}
+
+// postOrder recursive function
+function postOrder(root, callback) {
+  if (root === null) {
+    return null;
+  }
+  postOrder(root.left, callback);
+  postOrder(root.right, callback);
+  callback(root);
 }
 
 const myTree = new Tree(sortedArray);
@@ -164,6 +207,21 @@ find(myTree.root, 2); // non existent node
 
 // level order traversal test:
 levelOrder(myTree.root, callback);
+console.log('Recursive levelOrder Traversal:')
+levelOrderRecursive([myTree.root], callback);
+
+//preOrder traversal function: 
+console.log('preOrder traversal:')
+preOrder(myTree.root, callback);
+
+//inOrder traversal function:
+console.log('inOrder traversal:')
+inOrder(myTree.root, callback);
+
+//postOrder traversal function:
+console.log('postOrder traversal:')
+postOrder(myTree.root, callback);
+
 
 // pretty print function from theodinproject
 const prettyPrint = (node, prefix = '', isLeft = true) => {
