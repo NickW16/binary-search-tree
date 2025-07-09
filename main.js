@@ -111,6 +111,34 @@ function find(root, value) {
   }
 }
 
+
+
+// callback function to print.
+function callback(node) {
+  console.log(node.data);
+}
+
+// this traverses through each node and adds it to a queue.
+// it visits a node, does nothing with it and then adds its children
+// to the queue for later processing.
+// this is Breadth-Frist Search:
+function levelOrder(root, callback) {
+  console.log('LevelOrder Traversing:');
+  if (root === null) {
+    return null;
+  }
+  // this is an array that acts as a queue that is incremented
+  // and decremented after each node visit
+  let queue = [root];
+  // while there is at least one discovered node.
+  while (queue.length > 0) {
+    let node = queue.shift();
+    if (callback) callback(node);
+    if (node.left != null) queue.push(node.left);
+    if (node.right != null) queue.push(node.right);
+  }
+}
+
 const myTree = new Tree(sortedArray);
 
 // test cases:
@@ -133,6 +161,9 @@ myTree.root = deleteItem(myTree.root, 8); // deleting first node
 find(myTree.root, 1000); // existing node
 find(myTree.root, 4); // existing node
 find(myTree.root, 2); // non existent node
+
+// level order traversal test:
+levelOrder(myTree.root, callback);
 
 // pretty print function from theodinproject
 const prettyPrint = (node, prefix = '', isLeft = true) => {
