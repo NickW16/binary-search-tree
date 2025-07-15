@@ -1,7 +1,19 @@
-// test array
+// test array. Not used
 const testArray = [1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324];
-// this sorts the array and removes duplicate values!
-const sortedArray = [...new Set(testArray)].sort((a, b) => a - b);
+
+// creates random array with numbers under 100
+function randomArrayCreator() {
+    const array = [];
+    for (let i = 0; i < 20; i++) {
+        array.push(Math.floor(Math.random() * 100));
+    }
+    return array;
+}
+
+function bstArraySorter(array=[]) {
+  const sortedArray = [...new Set(array)].sort((a, b) => a - b);
+  return sortedArray;
+}
 
 // node factory with both right and left attributes
 function Node(data) {
@@ -219,6 +231,7 @@ function depth(root, value) {
   return null;
 }
 
+// checks if bst is balanced
 function isBalanced(bst) {
   function check(node) {
     if (node === null) return 0; // height of empty subtree
@@ -232,11 +245,28 @@ function isBalanced(bst) {
   return check(bst.root) !== -1;
 }
 
+function rebalance(bst) {
+  // collect all node values in sorted order using in-order traversal
+  const values = [];
+  //traverses through the bst and re-organizes it
+  function inOrderCollect(node) {
+    if (node === null) return;
+    inOrderCollect(node.left);
+    values.push(node.data);
+    inOrderCollect(node.right);
+  }
+  inOrderCollect(bst.root);
 
+  // rebuild tree if sorted values
+  bst.root = buildTree(values, 0, values.length - 1);
+}
 
-const myTree = new Tree(sortedArray);
 
 // test cases:
+
+const myTree = new Tree(bstArraySorter(testArray));
+
+//sort and balance array with function
 
 // testing insert function
 myTree.root = insert(myTree.root, 1000); // high value
@@ -276,7 +306,7 @@ inOrder(myTree.root, callback);
 console.log('postOrder traversal:')
 postOrder(myTree.root, callback);
 
-// height function:
+// height function testing:
 height(myTree.root, 1000); // high value
 height(myTree.root, 4); // low value
 height(myTree.root, 99); // non-existent value
@@ -285,6 +315,9 @@ height(myTree.root, 99); // non-existent value
 depth(myTree.root, 1000); // high value
 depth(myTree.root, 4); // low value
 depth(myTree.root, 99); // non-existent value
+
+// rebalance tree
+rebalance(myTree);
 
 // testing if tree is balanced:
 console.log('Is tree balanced?', isBalanced(myTree));
@@ -305,3 +338,56 @@ const prettyPrint = (node, prefix = '', isLeft = true) => {
 };
 // prints the binary search tree
 prettyPrint(myTree.root);
+
+console.log('-=-=-==--=-=-=-=-=-=-=-=-==--=-=-=-=-=');
+console.log('The Odin Project Testing:');
+console.log('-=-=-==--=-=-=-=-=-=-=-=-==--=-=-=-=-=');
+// create new random tree
+const odinTree = new Tree(bstArraySorter(randomArrayCreator()));
+// is tree balanced?
+console.log('Is tree balanced?', isBalanced(odinTree)); // yes!
+// print!
+//preOrder traversal function: 
+console.log('preOrder traversal:')
+preOrder(odinTree.root, callback);
+
+//inOrder traversal function:
+console.log('inOrder traversal:')
+inOrder(odinTree.root, callback);
+
+//postOrder traversal function:
+console.log('postOrder traversal:')
+postOrder(odinTree.root, callback);
+
+// imbalance function and test
+// add 10 random numbers
+for (let i = 0; i <= 10; i++){
+  odinTree.root = insert(odinTree.root, Math.floor(Math.random() * 100));
+}
+// is tree balanced?
+console.log('Is tree balanced?', isBalanced(odinTree)); // no!
+// then, rebalance!
+console.log("rebalancing...");
+rebalance(odinTree);
+// is it balanced now?
+console.log('Is tree balanced?', isBalanced(odinTree));
+// print again!
+//preOrder traversal function: 
+console.log('preOrder traversal:')
+preOrder(odinTree.root, callback);
+
+//inOrder traversal function:
+console.log('inOrder traversal:')
+inOrder(odinTree.root, callback);
+
+//postOrder traversal function:
+console.log('postOrder traversal:')
+postOrder(odinTree.root, callback);
+
+// prints the binary search tree
+prettyPrint(odinTree.root);
+
+// all test pass!!!!!!!!
+
+
+
