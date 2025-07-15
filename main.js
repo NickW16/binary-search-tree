@@ -180,11 +180,12 @@ function postOrder(root, callback) {
   callback(root);
 }
 
+// this function returns the height of given value.
 function height(root, value) {
   const node = find(root, value);
   if (!node) {
     console.log(`${value} was not found!`);
-    return -1;
+    return null;
   }
 
   function getHeight(n) {
@@ -196,6 +197,42 @@ function height(root, value) {
   console.log(`Height of node ${value}: ${h}`);
   return h;
 }
+
+function depth(root, value) {
+  let current = root;
+  let d = 0;
+  while(current !== null) {
+    if (current.data === value) {
+      console.log(`Depth of node ${value}: ${d}`);
+      return d;
+    }
+    // d is incremented while current isn't found
+    d++;
+    // traverse until found
+    if (value < current.data) {
+      current = current.left;
+    } else {
+      current = current.right;
+    }
+  }
+  console.log(`${value} was not found!`);
+  return null;
+}
+
+function isBalanced(bst) {
+  function check(node) {
+    if (node === null) return 0; // height of empty subtree
+    const leftHeight = check(node.left);
+    if (leftHeight === -1) return -1; // left subtree not balanced
+    const rightHeight = check(node.right);
+    if (rightHeight === -1) return -1; // right subtree not balanced
+    if(Math.abs(leftHeight - rightHeight) > 1) return -1 // current node not balanced
+    return 1 + Math.max(leftHeight, rightHeight) // return height
+  }
+  return check(bst.root) !== -1;
+}
+
+
 
 const myTree = new Tree(sortedArray);
 
@@ -243,6 +280,14 @@ postOrder(myTree.root, callback);
 height(myTree.root, 1000); // high value
 height(myTree.root, 4); // low value
 height(myTree.root, 99); // non-existent value
+
+// depth function:
+depth(myTree.root, 1000); // high value
+depth(myTree.root, 4); // low value
+depth(myTree.root, 99); // non-existent value
+
+// testing if tree is balanced:
+console.log('Is tree balanced?', isBalanced(myTree));
 
 
 // pretty print function from theodinproject
